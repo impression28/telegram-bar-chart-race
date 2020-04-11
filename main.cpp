@@ -3,7 +3,6 @@
 #include <iostream>
 #include <sstream>
 #include <fstream>
-#include <algorithm>
 #include <jsoncpp/json/json.h>
 struct contact_months
 {
@@ -14,13 +13,12 @@ struct contact_months
 
 int main()
 {
-  // Vamos configurar os parâmetros com um arquivo JSON
-  std::ifstream config("result.json");
-  // Antes do parse escrevemos os conteúdos do arquivo em
-  // uma string
+  // Let's load and parse the json file
+  std::ifstream data("result.json");
+  // Before parsing write the contents to a string
   std::ostringstream sstr;
   char c;
-  while (config.get(c))
+  while (data.get(c))
   {
     sstr << c;
   }
@@ -32,7 +30,6 @@ int main()
   for (int i = 0; i < chats["chats"]["list"].size(); i++)
   {
     const auto contact = chats["chats"]["list"][i];
-    //std::cout << contact["name"].asString() << ": " << std::flush;
     const std::string name = contact["name"].asString();
 
     const contact_months con_mon {name};
@@ -65,6 +62,7 @@ int main()
       }
     }
   }
+  // Write out to a file
   std::ofstream logfile("bar_race.csv", std::ios::out | std::ios::trunc | std::ios::ate);
   if (!logfile.is_open())
   {
